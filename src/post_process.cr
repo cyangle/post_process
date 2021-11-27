@@ -11,9 +11,9 @@ module PostProcess
     config = Configuration.load(opts.config)
     tasks = config.tasks
 
-    return pp "No tasks found" if tasks.nil? || tasks.empty?
+    return puts "No tasks found" if tasks.nil? || tasks.empty?
 
-    pp "Found #{tasks.size} tasks"
+    puts "Found #{tasks.size} tasks"
     tasks.each(&.execute)
   end
 

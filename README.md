@@ -18,7 +18,7 @@ Add the following to shard.yaml
 development_dependencies:
   post_process:
     github: cyangle/post_process
-    version: ~> 0.1.0
+    version: ~> 0.2.0
 ```
 
 ## Usage
@@ -30,16 +30,24 @@ Run `post_process` binary within your project to find and replace strings with r
 Default configuration file is `.post_process.yml`.
 It allows to configure multiple find and replace tasks.
 
+All changes are applied sequentially in the order specified in the configuration file.
+
 Example configuration file:
 
 ```yaml
 tasks: # Required, an array of find and replace tasks.
-  -
-    name: 'Remove common method prefix "drive_[api_name]_"' # Required, name of the task.
+  - name: "update api files" # Required, name of the task.
     file_glob: './src/google_drive/api/*.cr' # Required, file path glob pattern for the files to be processed.
-    pattern: 'drive_%{api_name}_' # Required, string template for the regex pattern to find strings to change, supports interpolation.
-    new_value: 'Drive_%{capitalized_api_name}_' # Required, string template for the new string to replace the ones found by the pattern, supports interpolation.
-    multi_line: false # Optional, whether to match multiple lines, default to false.
+    changes: # Required, an array of changes you want to make to the files
+      -
+        name: 'Remove common method prefix "drive_[api_name]_"' # Required, name of the change
+        pattern: 'drive_%{api_name}_' # Required, string template for the regex pattern to find strings to change, supports interpolation.
+        new_value: '' # Required, string template for the new string to replace the ones found by the pattern, supports interpolation.
+        multi_line: false # Optional, whether to match multiple lines, default to false.
+      -
+        name: 'Restore operation name' # Required, name of the change
+        pattern: 'operation: "%{capitalized_api_name}Api.' # Required, string template for the regex pattern to find strings to change, supports interpolation.
+        new_value: 'operation: "%{capitalized_api_name}Api.drive_%{api_name}_' # Required, string template for the new string to replace the ones found by the pattern, supports interpolation.
 
 ```
 
@@ -54,12 +62,18 @@ the above configuration file after interpolation:
 
 ```yaml
 tasks: # Required, an array of find and replace tasks.
-  -
-    name: 'Remove common method prefix "drive_[api_name]_"' # Required, name of the task.
+  - name: "update api files" # Required, name of the task.
     file_glob: './src/google_drive/api/files_api.cr' # Required, file path glob pattern for the files to be processed.
-    pattern: 'drive_files_' # Required, string template for the pattern to find strings to change, supports interpolation.
-    new_value: 'Drive_Files_' # Required, string template for the new string to replace the ones found by the pattern, , supports interpolation.
-    multi_line: false # Optional, whether to match multiple lines, default to false
+    changes: # Required, an array of changes you want to make to the files
+      -
+        name: 'Remove common method prefix "drive_[api_name]_"' # Required, name of the change
+        pattern: 'drive_files_' # Required, string template for the regex pattern to find strings to change, supports interpolation.
+        new_value: '' # Required, string template for the new string to replace the ones found by the pattern, supports interpolation.
+        multi_line: false # Optional, whether to match multiple lines, default to false.
+      -
+        name: 'Restore operation name' # Required, name of the change
+        pattern: 'operation: "FilesApi.' # Required, string template for the regex pattern to find strings to change, supports interpolation.
+        new_value: 'operation: "FilesApi.drive_files_' # Required, string template for the new string to replace the ones found by the pattern, supports interpolation.
 
 ```
 

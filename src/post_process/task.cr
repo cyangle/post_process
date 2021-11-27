@@ -1,30 +1,28 @@
 require "dir"
 require "yaml"
-require "./processor"
+require "./change"
+require "./processors/task_processor"
 
 class PostProcess::Task
   include YAML::Serializable
 
   property name : String
   property file_glob : String
-  property pattern : String
-  property new_value : String
-  property multi_line : Bool? = false
+  property changes : Array(Change)
 
   def initialize(
     @name : String,
     @file_glob : String,
-    @pattern : String,
-    @new_value : String,
-    @multi_line : Bool? = false
+    @changes : Array(Change)
   )
   end
 
   def execute
-    pp "processing task #{name}"
-    Dir.glob(file_glob).each do |file_path|
-      Processor.new(task: self, file_path: file_path).execute
+    puts "processing task #{name}\n"
+    Dir.glob(file_glob).each_with_index do |file_path, index|
+      puts "\n\n" unless index == 0
+      TaskProcessor.new(task: self, file_path: file_path).execute
     end
-    pp "completed task #{name}"
+    puts "completed task #{name}"
   end
 end

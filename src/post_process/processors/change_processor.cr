@@ -16,13 +16,13 @@ class PostProcess::ChangeProcessor
   end
 
   def new_file_content
-    puts "Change: processing file '#{file_path}'"
-    puts "Change: pattern_string is '#{pattern_string}'"
-    puts "Change: new_value_string is '#{new_value_string}'"
-    puts "Change: variable_hash is:"
-    pp variable_hash
+    Log.info { "Change: processing file '#{file_path}'" }
+    Log.info { "Change: pattern_string is '#{pattern_string}'" }
+    Log.info { "Change: new_value_string is '#{new_value_string}'" }
+    Log.info { "Change: variable_hash is:" }
+    Log.info { variable_hash.to_s }
     changed_file_content = file_content.gsub(pattern_regex, new_value_string)
-    puts "Change: completed '#{file_path}'"
+    Log.info { "Change: completed '#{file_path}'" }
     changed_file_content
   end
 

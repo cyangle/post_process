@@ -18,11 +18,11 @@ class PostProcess::Task
   end
 
   def execute
-    puts "processing task #{name}\n"
+    Log.info { "processing task #{name}\n" }
     Dir.glob(file_glob).each_with_index do |file_path, index|
-      puts "\n\n" unless index == 0
+      Log.info { "\n\n" } unless index == 0
       TaskProcessor.new(task: self, file_path: file_path).execute
     end
-    puts "completed task #{name}"
+    Log.info { "completed task #{name}" }
   end
 end

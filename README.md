@@ -18,7 +18,7 @@ Add the following to shard.yaml
 development_dependencies:
   post_process:
     github: cyangle/post_process
-    version: ~> 0.2.0
+    version: ~> 0.2.1
 ```
 
 ## Usage

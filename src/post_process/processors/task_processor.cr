@@ -20,26 +20,26 @@ class PostProcess::TaskProcessor
   end
 
   def execute
-    puts "∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧"
-    puts "Task: processing '#{task.name}' for '#{file_path}'"
-    puts "----------------------------------------------------------------"
+    Log.info { "∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧∧" }
+    Log.info { "Task: processing '#{task.name}' for '#{file_path}'" }
+    Log.info { "----------------------------------------------------------------" }
     apply_changes_to_file_content
     File.write(file_path, file_content)
-    puts "----------------------------------------------------------------"
-    puts "Task: completed '#{task.name}' for '#{file_path}'"
-    puts "∨vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv"
+    Log.info { "----------------------------------------------------------------" }
+    Log.info { "Task: completed '#{task.name}' for '#{file_path}'" }
+    Log.info { "∨vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv" }
   end
 
   def apply_changes_to_file_content
     changes.each do |change|
-      puts "================================================================"
-      puts "Change: processing '#{change.name}'"
-      puts "================================================================"
+      Log.info { "================================================================" }
+      Log.info { "Change: processing '#{change.name}'" }
+      Log.info { "================================================================" }
       new_file_content = ChangeProcessor.new(task_processor: self, change: change).new_file_content
       @file_content = new_file_content
-      puts "================================================================"
-      puts "Change: completed '#{change.name}'"
-      puts "================================================================"
+      Log.info { "================================================================" }
+      Log.info { "Change: completed '#{change.name}'" }
+      Log.info { "================================================================" }
     end
   end
 end

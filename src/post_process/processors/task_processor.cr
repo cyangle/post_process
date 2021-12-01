@@ -16,7 +16,7 @@ class PostProcess::TaskProcessor
     @file_name = File.basename(@file_path)
     @file_content = File.read(@file_path)
     @api_name = @file_name.sub("_api.cr", "")
-    @capitalized_api_name = @api_name.capitalize
+    @capitalized_api_name = @api_name.split("_").map(&.capitalize).join
   end
 
   def execute
